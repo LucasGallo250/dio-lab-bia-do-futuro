@@ -1,149 +1,296 @@
-# 🤖 Agente Financeiro Inteligente com IA Generativa
+# 🤖 FinData AI: Agente Financeiro Inteligente
 
-## Contexto
+## Resumo do Projeto
 
-Os assistentes virtuais no setor financeiro estão evoluindo de simples chatbots reativos para **agentes inteligentes e proativos**. Neste desafio, você vai idealizar e prototipar um agente financeiro que utiliza IA Generativa para:
+O FinData AI é um agente financeiro inteligente focado em educação financeira e análise de dados.
+Ele foi desenvolvido para ajudar usuários a entender, organizar e melhorar sua vida financeira de forma proativa e baseada em dados reais, combinando análise de transações, perfil de investidor e histórico de atendimento.
 
-- **Antecipar necessidades** ao invés de apenas responder perguntas
-- **Personalizar** sugestões com base no contexto de cada cliente
-- **Cocriar soluções** financeiras de forma consultiva
-- **Garantir segurança** e confiabilidade nas respostas (anti-alucinação)
+Problema resolvido: Muitas pessoas têm dificuldade em compreender conceitos financeiros, como gestão de gastos, reserva de emergência, tipos de investimentos e otimização de orçamento. O FinData AI atua como consultor e educador financeiro, fornecendo insights claros e recomendações personalizadas.
 
-> [!TIP]
-> Na pasta [`examples/`](./examples/) você encontra referências de implementação para cada etapa deste desafio.
+Público-alvo: Usuários que desejam melhorar sua educação financeira e tomar decisões financeiras conscientes, com base em dados.
 
 ---
 
-## O Que Você Deve Entregar
+## ⚡ Funcionalidades Principais
 
-### 1. Documentação do Agente
-
-Defina **o que** seu agente faz e **como** ele funciona:
-
-- **Caso de Uso:** Qual problema financeiro ele resolve? (ex: consultoria de investimentos, planejamento de metas, alertas de gastos)
-- **Persona e Tom de Voz:** Como o agente se comporta e se comunica?
-- **Arquitetura:** Fluxo de dados e integração com a base de conhecimento
-- **Segurança:** Como evitar alucinações e garantir respostas confiáveis?
-
-📄 **Template:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
+- Análise de gastos: identifica padrões, aumentos ou reduções relevantes e destaca categorias com gastos excessivos.
+- Recomendações personalizadas: sugere produtos financeiros adequados ao perfil do usuário.
+- Insights financeiros: transforma dados brutos em recomendações práticas e educativas.
+- Educação proativa: fornece explicações sobre conceitos financeiros e melhores práticas.
+- Segurança e confiabilidade: evita alucinações, responde apenas com base em dados disponíveis e respeita o perfil do investidor.
 
 ---
 
-### 2. Base de Conhecimento
+## 🏗️ Arquitetura
 
-Utilize os **dados mockados** disponíveis na pasta [`data/`](./data/) para alimentar seu agente:
+O FinData AI possui uma arquitetura modular, garantindo flexibilidade, confiabilidade e escalabilidade:
 
-| Arquivo | Formato | Descrição |
-|---------|---------|-----------|
-| `transacoes.csv` | CSV | Histórico de transações do cliente |
-| `historico_atendimento.csv` | CSV | Histórico de atendimentos anteriores |
-| `perfil_investidor.json` | JSON | Perfil e preferências do cliente |
-| `produtos_financeiros.json` | JSON | Produtos e serviços disponíveis |
+```mermaid
+flowchart TD
+    A[Usuário] -->|Mensagem| B["Streamlist\n (Interface Visual)"]
+    B --> C["Agente LLM (GPT-4)"]
+    C --> D["Base de Conhecimento\n (CSV/JSON)"]
+    D --> C
+    C --> E[Validação de Respostas]
+    E --> F[Resposta ao Usuário]
+```
+### Componentes detalhados:
 
-Você pode adaptar ou expandir esses dados conforme seu caso de uso.
-
-📄 **Template:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
-
----
-
-### 3. Prompts do Agente
-
-Documente os prompts que definem o comportamento do seu agente:
-
-- **System Prompt:** Instruções gerais de comportamento e restrições
-- **Exemplos de Interação:** Cenários de uso com entrada e saída esperada
-- **Tratamento de Edge Cases:** Como o agente lida com situações limite
-
-📄 **Template:** [`docs/03-prompts.md`](./docs/03-prompts.md)
+| Componente | Descrição |
+|------------|-----------|
+| Interface | Chatbot interativo em Streamlit para comunicação com o usuário (https://streamlit.io/) |
+| LLM | Modelo de linguagem (ex: GPT via API ou Ollama (local) |
+| Base de Conhecimento | Conjunto de dados mockados `(transações, perfil, histórico e produtos financeiros)` |
+| Validação | Checagem de consistência e prevenção de respostas incorretas ou alucinações |
 
 ---
 
-### 4. Aplicação Funcional
+## 📊 Base de Dados
 
-Desenvolva um **protótipo funcional** do seu agente:
+O agente utiliza dados mockados para simular clientes reais:
 
-- Chatbot interativo (sugestão: Streamlit, Gradio ou similar)
-- Integração com LLM (via API ou modelo local)
-- Conexão com a base de conhecimento
+| Arquivo | Formato | Para que serve no FinData |
+|---------|---------|---------------------|
+| `transacoes.csv` | CSV | Histórico de transações do cliente, usado para análise de gastos |
+| `historico_atendimento.csv` | CSV | Contextualiza interações anteriores do cliente |
+| `perfil_investidor.json` | JSON | Define o perfil do cliente para personalização de recomendações |
+| `produtos_financeiros.json` | JSON | Lista de produtos e serviços financeiros disponíveis para sugestão |
 
-📁 **Pasta:** [`src/`](./src/)
+> Dados são carregados no início da sessão e consultados dinamicamente pelo agente, garantindo respostas confiáveis.
+
+Exemplo - Perfil do Cliente
+
+```json
+{
+  "nome": "João Silva",
+  "idade": 32,
+  "renda_mensal": 5000.00,
+  "perfil_investidor": "moderado",
+  "objetivo_principal": "Construir reserva de emergência",
+  "metas": [
+    {
+      "meta": "Completar reserva de emergência",
+      "valor_necessario": 15000.00,
+      "prazo": "2026-06"
+    },
+    {
+      "meta": "Entrada do apartamento",
+      "valor_necessario": 50000.00,
+      "prazo": "2027-12"
+    }
+  ]
+}
+```
+### Como o Agente Utiliza Este JSON
+**- Personalização de Recomendação:**
+    O agente utiliza o perfil_investidor para sugerir investimentos compatíveis (ex: conservador, moderado, agressivo).
+    
+**- Definição de Prioridades Financeiras:**
+    O campo objetivo_principal e a lista metas ajudam o agente a focar em alertas e sugestões que acelerem o alcance das metas do cliente.
+    
+**- Cálculos e Insights:**
+    Com renda_mensal e metas, o agente pode calcular quanto o cliente deve poupar mensalmente, indicar ajustes no orçamento e gerar recomendações práticas.
+    
+**- Exemplo no Prompt:**
+    Ao montar o contexto para o LLM, os dados podem ser incluídos assim:
+
+```json
+"DADOS_DO_CLIENTE": {
+  "nome": "João Silva",
+  "idade": 32,
+  "perfil_investidor": "moderado",
+  "renda_mensal": 5000.00,
+  "metas": [
+    {"meta": "Completar reserva de emergência", "valor_necessario": 15000.00, "prazo": "2026-06"}
+  ]
+}
+```
+> O agente lê esse JSON e gera respostas personalizadas, mantendo segurança e assertividade, sem inventar informações.
+
+
+Exemplo - Transações do Cliente
+
+```json
+[
+  {
+    "data": "2026-03-01",
+    "categoria": "Alimentação",
+    "descricao": "Supermercado Extra",
+    "valor": 450.00
+  },
+  {
+    "data": "2026-03-03",
+    "categoria": "Entretenimento",
+    "descricao": "Assinatura Netflix",
+    "valor": 55.00
+  },
+  {
+    "data": "2026-03-05",
+    "categoria": "Transporte",
+    "descricao": "Combustível Posto Ipiranga",
+    "valor": 200.00
+  },
+  {
+    "data": "2026-03-10",
+    "categoria": "Saúde",
+    "descricao": "Consulta médica",
+    "valor": 180.00
+  },
+  {
+    "data": "2026-03-12",
+    "categoria": "Educação",
+    "descricao": "Curso Python Online",
+    "valor": 120.00
+  }
+]
+```
+### Como o Agente Utiliza Este JSON
+**- Análise de Padrões de Gastos:**
+    O agente lê todas as transações e calcula totais por categoria, identificando aumentos ou reduções de gastos.
+    
+**- Insights Personalizados:**
+    Ex.: “Seus gastos com alimentação aumentaram 15% em relação ao mês anterior. Sugiro revisar compras de supermercado ou delivery.”
+    
+**- Sugestões de Planejamento:**
+    Baseado no histórico, o agente pode criar alertas de limite por categoria e indicar áreas de otimização do orçamento.
+    
+**- Exemplo no Prompt:**
+
+```json
+"TRANSACOES_CLIENTE": [
+  {"data": "2026-03-01", "categoria": "Alimentação", "descricao": "Supermercado Extra", "valor": 450.00},
+  {"data": "2026-03-03", "categoria": "Entretenimento", "descricao": "Assinatura Netflix", "valor": 55.00}
+]
+```
+> Esse JSON vai direto para o contexto do LLM, garantindo que todas as respostas estejam baseadas em dados reais, evitando alucinações.
 
 ---
 
-### 5. Avaliação e Métricas
+## 🚀 Como Rodar o Projeto
+1. Clonar o repositório 
+```bash
+git clone https://github.com/seu-usuario/dio-lab-bia-do-futuro.git
+cd dio-lab-bia-do-futuro/src
+```
+> 💡 Dica: Verifique se você tem o Python 3.10+ instalado. Recomenda-se criar um ambiente virtual antes de instalar as dependências:
 
-Descreva como você avalia a qualidade do seu agente:
+2. Crie e ative um ambiente virtual:
+```bash
+python -m venv venv
+source venv/bin/activate   # Linux/macOS
+venv\Scripts\activate      # Windows
+```
 
-**Métricas Sugeridas:**
-- Precisão/assertividade das respostas
-- Taxa de respostas seguras (sem alucinações)
-- Coerência com o perfil do cliente
 
-📄 **Template:** [`docs/04-metricas.md`](./docs/04-metricas.md)
+3. Instalar dependências
+```bash
+pip install -r src/requirements.txt
+```
+
+4. Executar aplicação
+```bash
+streamlit run src/app.py
+```
+
+4. Estrutura de código
+```bash
+📁 src/
+    ├── app.py           # Aplicação principal (Streamlit)
+    ├── agente.py        # Lógica do agente
+    ├── config.py        # Configurações (API keys, etc.)
+    └── requirements.txt # Dependências
+```
 
 ---
 
-### 6. Pitch
+## 💬 Exemplos de Uso
 
-Grave um **pitch de 3 minutos** (estilo elevador) apresentando:
-
-- Qual problema seu agente resolve?
-- Como ele funciona na prática?
-- Por que essa solução é inovadora?
-
-📄 **Template:** [`docs/05-pitch.md`](./docs/05-pitch.md)
-
----
-
-## Ferramentas Sugeridas
-
-Todas as ferramentas abaixo possuem versões gratuitas:
-
-| Categoria | Ferramentas |
-|-----------|-------------|
-| **LLMs** | [ChatGPT](https://chat.openai.com/), [Copilot](https://copilot.microsoft.com/), [Gemini](https://gemini.google.com/), [Claude](https://claude.ai/), [Ollama](https://ollama.ai/) |
-| **Desenvolvimento** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
-| **Orquestração** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
-| **Diagramas** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
-
----
-
-## Estrutura do Repositório
+**Consulta de gastos:**
 
 ```
-📁 lab-agente-financeiro/
-│
-├── 📄 README.md
-│
-├── 📁 data/                          # Dados mockados para o agente
-│   ├── historico_atendimento.csv     # Histórico de atendimentos (CSV)
-│   ├── perfil_investidor.json        # Perfil do cliente (JSON)
-│   ├── produtos_financeiros.json     # Produtos disponíveis (JSON)
-│   └── transacoes.csv                # Histórico de transações (CSV)
-│
-├── 📁 docs/                          # Documentação do projeto
-│   ├── 01-documentacao-agente.md     # Caso de uso e arquitetura
-│   ├── 02-base-conhecimento.md       # Estratégia de dados
-│   ├── 03-prompts.md                 # Engenharia de prompts
-│   ├── 04-metricas.md                # Avaliação e métricas
-│   └── 05-pitch.md                   # Roteiro do pitch
-│
-├── 📁 src/                           # Código da aplicação
-│   └── app.py                        # (exemplo de estrutura)
-│
-├── 📁 assets/                        # Imagens e diagramas
-│   └── ...
-│
-└── 📁 examples/                      # Referências e exemplos
-    └── README.md
+Usuário: "Quanto gastei com lazer?"
+Resumo: R$ 450 em lazer no último mês
+Insight: Esse aumento representa 30% acima do seu padrão habitual
+Sugestão: Defina um limite mensal para lazer para equilibrar o orçamento
+```
+**Recomendação de investimento:**
+
+```
+Usuário: "Posso investir agora?"
+Resumo: Perfil moderado, saldo disponível
+Insight: Ainda não possui reserva de emergência
+Sugestão: Estruture uma reserva de 3-6 meses antes de investir
+```
+**Dicas de otimização financeira:**
+
+```
+Usuário: "O que posso melhorar nas minhas finanças?"
+Resumo: Alimentação é a maior despesa mensal
+Insight: Representa mais de 40% dos gastos
+Sugestão: Reduzir hábitos de delivery e refeições fora de casa
 ```
 
 ---
 
-## Dicas Finais
+## 📏 Métricas de Avaliação
 
-1. **Comece pelo prompt:** Um bom system prompt é a base de um agente eficaz
-2. **Use os dados mockados:** Eles garantem consistência e evitam problemas com dados sensíveis
-3. **Foque na segurança:** No setor financeiro, evitar alucinações é crítico
-4. **Teste cenários reais:** Simule perguntas que um cliente faria de verdade
-5. **Seja direto no pitch:** 3 minutos passam rápido, vá ao ponto
+O FinData AI é avaliado com base em:
+
+| Métrica | O que avalia | Exemplo |
+|---------|---------|---------------------|
+| Assertividade | Correção das respostas | Saldo retornado é o correto |
+| Segurança | Evita alucinações | Responde apenas com dados disponíveis |
+| Coerência | Compatibilidade com perfil | Recomendação de produto adequada ao perfil do investidor |
+
+> Testes recomendados: colegas ou familiares avaliam respostas de 1 a 5 para cada métrica.
+
+---
+
+### Cenários de Teste
+ 
+| # | Pergunta | Resultado Esperado |
+|---|----------|-------------------|
+| 1 | "Quanto gastei com alimentação?" | Valor correto do `transacoes.csv` |
+| 2 | "Estou gastando muito?" | Identificação de padrões e possível aumento de gastos |
+| 3 | "Qual investimento você recomenda?" | Sugestão alinhada ao perfil do investidor |
+| 4 | "Qual o rendimento exato desse investimento?" | Agente informa que não possui essa informação |
+ 
+> 📄 Documentação completa em [`docs/04-metricas.md`](./docs/04-metricas.md)
+ 
+---
+
+## ⚙️ Tecnologias
+
+- LLM: GPT-4
+- Interface: Streamlit
+- Linguagem: Python
+- Dados: CSV/JSON
+- Orquestração: Python nativo, modularização de código
+
+---
+
+## 📜 Licença
+
+MIT License – consulte o arquivo LICENSE para detalhes.
+
+---
+
+## 👨‍💻 Autor
+
+### Lucas Fernandes
+
+PCD auditivo, usuário de implante coclear e apaixonado por contábeis, tecnologia, dados e inteligência artificial.
+
+Experiência em:
+
+Dashboards Power BI/Looker Studio
+
+FP&A/Engenharia de Dados/Analista de Dados
+
+Automação de Processos/Projetos com IA
+
+📍 Franca - SP
+
+---
+
+© 2026 Lucas Fernandes Todos os direitos reservados

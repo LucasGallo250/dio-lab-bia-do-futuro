@@ -4,8 +4,8 @@
 
 A avaliação pode ser feita de duas formas complementares:
 
-1. **Testes estruturados:** Você define perguntas e respostas esperadas;
-2. **Feedback real:** Pessoas testam o agente e dão notas.
+1. **Testes estruturados:** Cenários definidos para validar comportamento, precisão e segurança;
+2. **Simulação de uso real:** 2. **Feedback real:** Pessoas testam o agente e dão notas.
 
 ---
 
@@ -13,12 +13,14 @@ A avaliação pode ser feita de duas formas complementares:
 
 | Métrica | O que avalia | Exemplo de teste |
 |---------|--------------|------------------|
-| **Assertividade** | O agente respondeu o que foi perguntado? | Perguntar o saldo e receber o valor correto |
-| **Segurança** | O agente evitou inventar informações? | Perguntar algo fora do contexto e ele admitir que não sabe |
-| **Coerência** | A resposta faz sentido para o perfil do cliente? | Sugerir investimento conservador para cliente conservador |
+| **Assertividade** | O agente responde corretamente com base nos dados | Perguntar total de gastos e receber valor correto |
+| **Segurança (Anti-alucinação)** | O agente evita inventar informações | Perguntar algo fora do contexto e ele admitir limitação |
+| **Coerência** | A resposta está alinhada ao perfil do cliente | Sugerir investimentos compatíveis com perfil |
+| **Clareza** | A resposta é fácil de entender | Resposta organizada com resumo, insight e sugestão |
+| **Capacidade Analítica** | O agente gera insights úteis a partir dos dados | Identificar padrões de consumo e sugerir melhorias |
 
 > [!TIP]
-> Peça para 3-5 pessoas (amigos, família, colegas) testarem seu agente e avaliarem cada métrica com notas de 1 a 5. Isso torna suas métricas mais confiáveis! Caso use os arquivos da pasta `data`, lembre-se de contextualizar os participantes sobre o **cliente fictício** representado nesses dados.
+> Testes com usuários reais aumentam muito a qualidade da avaliação. Sempre que possível, peça para outras pessoas interagirem com o agente e avaliarem a experiência.
 
 ---
 
@@ -31,19 +33,19 @@ Crie testes simples para validar seu agente:
 - **Resposta esperada:** Valor baseado no `transacoes.csv`
 - **Resultado:** [ ] Correto  [ ] Incorreto
 
-### Teste 2: Recomendação de produto
-- **Pergunta:** "Qual investimento você recomenda para mim?"
-- **Resposta esperada:** Produto compatível com o perfil do cliente
+### Teste 2: Análise de comportamento
+- **Pergunta:** "Estou gastando muito?"
+- **Resposta esperada:** Identificação de padrões e possível aumento de gastos
 - **Resultado:** [ ] Correto  [ ] Incorreto
 
-### Teste 3: Pergunta fora do escopo
-- **Pergunta:** "Qual a previsão do tempo?"
-- **Resposta esperada:** Agente informa que só trata de finanças
+### Teste 3: Recomendação de produto
+- **Pergunta:** "Qual investimento você recomenda?"
+- **Resposta esperada:** Sugestão alinhada ao perfil do investidor
 - **Resultado:** [ ] Correto  [ ] Incorreto
 
-### Teste 4: Informação inexistente
-- **Pergunta:** "Quanto rende o produto XYZ?"
-- **Resposta esperada:** Agente admite não ter essa informação
+### Teste 4: Pergunta fora do escopo
+- **Pergunta:** "Qual o rendimento exato desse investimento?"
+- **Resposta esperada:** Agente informa que não possui essa informação
 - **Resultado:** [ ] Correto  [ ] Incorreto
 
 ---
@@ -53,19 +55,51 @@ Crie testes simples para validar seu agente:
 Após os testes, registre suas conclusões:
 
 **O que funcionou bem:**
-- [Liste aqui]
+- O agente conseguiu responder com base nos dados disponíveis
+- As respostas seguiram uma estrutura clara (Resumo + Insight + Sugestão)
+- Boa capacidade de identificar padrões de gastos
+- Evitou alucinações na maioria dos testes
 
 **O que pode melhorar:**
-- [Liste aqui]
+- Melhorar a profundidade das recomendações financeiras
+- Refinar a personalização com mais dados do usuário
+- Aumentar a precisão em perguntas mais específicas
+- Evoluir para análises mais avançadas (ex: previsão de gastos futuros)
 
 ---
 
 ## Métricas Avançadas (Opcional)
 
-Para quem quer explorar mais, algumas métricas técnicas de observabilidade também podem fazer parte da sua solução, como:
+Além das métricas funcionais, também foram considerados aspectos técnicos:
 
-- Latência e tempo de resposta;
-- Consumo de tokens e custos;
-- Logs e taxa de erros.
+- Tempo de resposta: rapidez na geração das respostas
+- Consumo de tokens: eficiência no uso do modelo
+- Consistência: estabilidade das respostas em perguntas similares
+Essas métricas são importantes para avaliar a escalabilidade e eficiência do agente.
+
+---
+
+## Diferencial do Projeto
+
+A avaliação do agente não se limita apenas a respostas corretas, mas também considera:
+
+- Capacidade de análise de dados
+- Geração de insights relevantes
+- Segurança contra alucinações
+
+Isso aproxima o projeto de um cenário real de uso em sistemas financeiros baseados em IA.
+
+---
+
+## Resultado final
+
+Com isso aqui você mostra:
+
+- Pensamento analítico
+- Preocupação com qualidade
+-  Noção de avaliação de IA
+-  Mentalidade de produto (não só código)
+
+---
 
 Ferramentas especializadas em LLMs, como [LangWatch](https://langwatch.ai/) e [LangFuse](https://langfuse.com/), são exemplos que podem ajudar nesse monitoramento. Entretanto, fique à vontade para usar qualquer outra que você já conheça!
